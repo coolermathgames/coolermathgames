@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>???</title>
+  <link href="https://fonts.googleapis.com/css2?family=Maven+Pro&display=swap" rel="stylesheet">
+  <style>
+    body, html {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      font-family: 'Maven Pro', sans-serif;
+      background-color: black;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      color: white;
+      position: relative;
+    }
+    input[type="text"] {
+      width: 80%;
+      padding: 10px;
+      border: 2px solid white;
+      background-color: transparent;
+      color: white;
+      font-size: 18px;
+      border-radius: 10px;
+    }
+    button {
+      margin-top: 20px;
+      padding: 10px 20px;
+      border: 2px solid white;
+      background-color: transparent;
+      color: white;
+      font-size: 18px;
+      cursor: pointer;
+      border-radius: 10px;
+      transition: transform 0.2s ease-in-out;
+      width: auto;
+    }
+    button:disabled {
+      border-color: gray;
+      color: gray;
+      cursor: not-allowed;
+    }
+    button:hover:not(:disabled) {
+      transform: scale(1.1);
+    }
+    .predefined-buttons {
+      position: absolute;
+      bottom: 20px;
+      display: flex;
+      gap: 10px;
+    }
+    .predefined-buttons button {
+      padding: 10px 20px; /* Adjust padding to ensure buttons are wide based on text */
+      font-size: 16px;
+      transition: transform 0.2s ease-in-out;
+      width: auto;
+      white-space: nowrap; /* Prevent text from wrapping */
+    }
+    .predefined-buttons button:hover {
+      transform: scale(1.1);
+    }
+  </style>
+</head>
+<body>
+
+  <input type="text" id="linkInput" placeholder="enter url" oninput="checkInput()">
+  <button id="openButton" onclick="openFullscreenIframe()" disabled>open</button>
+
+  <div class="predefined-buttons">
+    <button onclick="pasteUrl('coolmathgames.com')">Cool Math Games</button>
+    <button onclick="pasteUrl('crazygames.com')">Crazy Games</button>
+    <button onclick="pasteUrl('poki.com')">Poki</button>
+    <button onclick="pasteUrl('googlesnakemods.com/v/current/')">Google Snake</button>
+  </div>
+
+  <script>
+    function checkInput() {
+      const input = document.getElementById('linkInput').value.trim();
+      document.getElementById('openButton').disabled = input === '';
+    }
+
+    function openFullscreenIframe() {
+      let url = document.getElementById('linkInput').value.trim();
+
+      if (!url.startsWith('http://') && !url.startsWith('https://')) {
+        url = 'https://' + url;
+      }
+
+      const newWindow = window.open('about:blank', '_blank');
+      newWindow.document.write(`
+        <html>
+          <head>
+            <style>
+              body, html {
+                background-color: black;
+                margin: 0;
+                height: 100%;
+              }
+              iframe {
+                width: 100%;
+                height: 100%;
+                border: none;
+              }
+            </style>
+          </head>
+          <body>
+            <iframe src="${url}" allowfullscreen></iframe>
+          </body>
+        </html>
+      `);
+      newWindow.document.close();
+    }
+
+    function pasteUrl(url) {
+      document.getElementById('linkInput').value = url;
+      checkInput();
+    }
+  </script>
+</body>
+</html>
